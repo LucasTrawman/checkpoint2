@@ -1,19 +1,21 @@
+let formulario = document.querySelector("form");
 let btnAcessar = document.querySelector("#btn_acessar");
 let inputEmail = document.querySelector("#inputEmail");
 let emailErro = document.querySelector("#EmailErro");
 let inputSenha = document.querySelector("#inputPassword");
 let senhaErro = document.querySelector("#SenhaErro");
+let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-//Validar campo email vazio/nulo
+// Validar campo email vazio/nulo
 function validarEmail() {
 
-  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(inputEmail.value)) {
+  if (emailRegex.test(inputEmail.value)) {
     inputEmail.classList.add("campo_correto");
-    emailErro.classList.add("none");
+    emailErro.classList.add("hidden");
   } else {
     inputEmail.classList.add("campo_incorreto");
     inputEmail.classList.remove("campo_correto");
-    emailErro.classList.remove("none");
+    emailErro.classList.remove("hidden");
   }
 }
 inputEmail.addEventListener("keyup", function() {
@@ -22,17 +24,17 @@ inputEmail.addEventListener("keyup", function() {
   validarAcessar();
 });
 
-//Validar campo senha vazio/nulo
+// Validar campo senha vazio/nulo
 function validarSenha() {
   if (!inputSenha.value) {
     inputSenha.classList.add("campo_incorreto");
     inputSenha.classList.remove("campo_correto");
-    senhaErro.classList.remove("none");
+    senhaErro.classList.remove("hidden");
   }
 
   if (inputSenha.value != "") {
     inputSenha.classList.add("campo_correto");
-    senhaErro.classList.add("none");
+    senhaErro.classList.add("hidden");
   }
 }
 inputSenha.addEventListener("input", function() {
@@ -41,18 +43,18 @@ inputSenha.addEventListener("input", function() {
   validarAcessar();
 });
 
+
+// Validar botão
 function btnRemoveDisabled() {
-  btnAcessar.removeAttribute("disabled");
   btnAcessar.classList.remove("disabled");
 }
 
 function btnAddDisabled() {
-  btnAcessar.setAttribute("disabled", "");
   btnAcessar.classList.add("disabled");
 }
 
 function validarAcessar(){
-   if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(inputEmail.value) && inputSenha.value.length > 0){
+   if(emailRegex.test(inputEmail.value) && inputSenha.value.length > 0){
      btnRemoveDisabled()
    }else{
      btnAddDisabled()
