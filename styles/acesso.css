@@ -103,7 +103,7 @@ h6{
   border: 1px solid green;
   box-shadow: 0 0 0.4rem rgb(46, 190, 70);
 }
-.none{
+.hidden{
   display:none;
 }
 
