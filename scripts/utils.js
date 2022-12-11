@@ -1,18 +1,22 @@
 let btnAcessar = document.querySelector("#btn_acessar");
-let inputSenha = document.querySelector("#inputPassword");
 let inputEmail = document.querySelector("#inputEmail");
+let emailErro = document.querySelector("#EmailErro");
+let inputSenha = document.querySelector("#inputPassword");
+let senhaErro = document.querySelector("#SenhaErro");
 
 //Validar campo email vazio/nulo
 function validarEmail() {
 
   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(inputEmail.value)) {
     inputEmail.classList.add("campo_correto");
+    emailErro.classList.add("none");
   } else {
     inputEmail.classList.add("campo_incorreto");
     inputEmail.classList.remove("campo_correto");
+    emailErro.classList.remove("none");
   }
 }
-inputEmail.addEventListener("input", function() {
+inputEmail.addEventListener("keyup", function() {
   validarEmail();
   inputEmail.value.trim();
   validarAcessar();
@@ -23,10 +27,12 @@ function validarSenha() {
   if (!inputSenha.value) {
     inputSenha.classList.add("campo_incorreto");
     inputSenha.classList.remove("campo_correto");
+    senhaErro.classList.remove("none");
   }
 
   if (inputSenha.value != "") {
     inputSenha.classList.add("campo_correto");
+    senhaErro.classList.add("none");
   }
 }
 inputSenha.addEventListener("input", function() {
