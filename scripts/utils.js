@@ -18,11 +18,6 @@ function validarEmail() {
     emailErro.classList.remove("hidden");
   }
 }
-inputEmail.addEventListener("keyup", function() {
-  validarEmail();
-  inputEmail.value.trim();
-  validarAcessar();
-});
 
 // Validar campo senha vazio/nulo
 function validarSenha() {
@@ -37,11 +32,6 @@ function validarSenha() {
     senhaErro.classList.add("hidden");
   }
 }
-inputSenha.addEventListener("input", function() {
-  validarSenha();
-  inputSenha.value.trim();
-  validarAcessar();
-});
 
 
 // Validar botão
@@ -60,3 +50,26 @@ function validarAcessar(){
      btnAddDisabled()
    }
 }
+
+// Validar campos de e-mail e senha
+formulario.addEventListener("keyup", function() {
+  validarEmail();
+  inputEmail.value.trim();
+  validarAcessar();
+  validarSenha();
+  inputSenha.value.trim();
+  validarAcessar();
+});
+
+
+
+/* Validar acesso
+formulario.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  if (inputSenha.value < 3){
+    alert("Verifique sua senha!")
+  }
+})
+
+*/

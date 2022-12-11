@@ -2,8 +2,10 @@ let formulario = document.querySelector('form');
 let campos = document.querySelectorAll ('.required');
 let spans = document.querySelectorAll ('.span-required');
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+let btnCadastrar = document.querySelector("#btn_cadastrar");
 
 function setError (index){
+    campos[index].classList.remove("campo_correto");
     campos[index].classList.add("campo_incorreto");
     spans[index].classList.remove("hidden");
 }
@@ -19,7 +21,7 @@ function nomeValidacao(){
         setError(0);
     } else {
         removeError(0);
-    }
+    } return true;
 }
 
 function sobrenomeValidacao(){
@@ -28,7 +30,7 @@ function sobrenomeValidacao(){
             setError(1);
         } else {
             removeError(1);
-        }
+        } return true;
     }
 function emailValidacao(){
         if(!emailRegex.test(campos[2].value))
@@ -36,7 +38,7 @@ function emailValidacao(){
             setError(2);
         } else {
             removeError(2);
-        }
+        } return true;
     }
 function senhaValidacao(){
         if (campos[3].value.length < 8)
@@ -45,7 +47,7 @@ function senhaValidacao(){
         } else {
             removeError(3);
             compareSenhas();
-        }
+        } return true;
     }
 
 function senhaRepValidacao(){
@@ -55,7 +57,7 @@ function senhaRepValidacao(){
         } else {
             removeError(4);
             compareSenhas();
-        }
+        } return true;
     }
 
 function compareSenhas(){
@@ -67,4 +69,13 @@ function compareSenhas(){
         }
     }
 
-    
+// Validação botão
+function ValidarDados(){
+    if(nomeValidacao() == true && sobrenomeValidacao() == true && emailValidacao() == true && senhaRepValidacao() == true){
+        btnCadastrar.classList.remove("disabled");
+        }
+}
+
+campos[4].addEventListener("keyup", function() {
+    ValidarDados();
+  });
