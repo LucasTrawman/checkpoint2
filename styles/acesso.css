@@ -64,6 +64,11 @@ button {
   font-weight: 400;
   font-size: 1em;
 }
+
+button:hover {
+  background-color: #6C63FF; // #3b64e7
+}
+
 h6{
   padding-top: .5em;
   color: red;
