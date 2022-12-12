@@ -46,8 +46,10 @@ async function buscaTarefas() {
         let respostaFinal = await respostaAPI.json();
         manipulaListaTarefas(respostaFinal);
         }else{
-            throw Error("Não foi possível buscar as tarefas")
+            throw Error("Não foi possível buscar as tarefas");
         }
+    } catch (error){
+        alert(error)
     }
 }
 
