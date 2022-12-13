@@ -30,6 +30,7 @@ async function buscaDadosUsuario() {
         if (respostaAPI.status == 200) {
             let respostaFinal = await respostaAPI.json();
             modificaUsuarioDOM(respostaFinal);
+            capturaUsuarioID(respostaFinal);
         }else{
         throw Error("Usuário não encontrado")
         }
@@ -45,8 +46,6 @@ let modificaUsuarioDOM = (dadosUsuario) => {
     // Altera o nome do usuário
     nomeUsuario.innerText = `${dadosUsuario.firstName} ${dadosUsuario.lastName}`;
 }
-
-
 
 // TAREFAS > Selecionando tarefas
 let tarefasPendentes = document.querySelector(".tarefas-pendentes");
@@ -89,7 +88,7 @@ function tarefaPendente(tarefa){
     let li = document.createElement("li");
     li.classList.add("tarefa");
     li.innerHTML = `
-        <div id="${tarefa.id}" class="not-done"></div>
+        <div id="${tarefa.id}" class="not-done" onclick="atualizaTarefa(${tarefa.id})"></div>
         <div class="descricao">
           <p class="name">${tarefa.description}</p>
           <p class="timestamp">Criada em: ${tarefa.createdAt}</p>
@@ -111,24 +110,49 @@ function tarefaTerminada(tarefa){
     tarefasTerminadas.appendChild(li);
 };
 
+//////////////////////////////////
 
 // TAREFAS > Editando tarefas
-let checkbox = document.querySelector(".not-done");
-
-checkbox.addEventListener("click", function() {
-    checkbox.classList.remove("not-done");
-    checkbox.classList.add("done");
-});
-
-// log out
-
-let finalizarSessao = document.getElementById("closeApp")
-
-finalizarSessao.addEventListener("click", function(){
-    logout()
-})
-
-function logout(){
-    sessionStorage.removeItem('jwt')
-    window.location.href = "index.html";
+function atualizaTarefa(id){
+    capturaTarefaID(id);
+    alert("Tarefa atualizada!");
 }
+
+function capturaUsuarioID(dadosUsuario) {
+    console.log(`${dadosUsuario.id}`);
+}
+
+function capturaTarefaID(tarefa){
+    console.log(`${tarefa.completed}`);
+}
+
+/* TESTES
+let criarTarefa = document.querySelector(".nova-tarefa");
+let capturaUsuarioID = (dadosUsuario) => {
+    let usuarioID = `${dadosUsuario.id}`
+}
+
+let tasks = {
+        description: descricao,
+        completed: true,
+    }
+    console.log(tasks);
+
+// TAREFAS > Incluindo tarefas
+
+function incluirTarefa(descricao){
+    let novaTarefa = document.querySelector("#novaTarefa");
+    
+
+    let descricaoTarefa = normalizaStringUsandoTrim(novaTarefa.value);
+
+    atualizaAPI = JSON.stringify(descricao);
+    alert(descricaoTarefa);
+    console.log(tasks)
+    // window.location.reload();
+}
+
+criarTarefa.addEventListener("submit", function(){
+    incluirTarefa();
+})
+*/
