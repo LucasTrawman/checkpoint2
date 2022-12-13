@@ -1,6 +1,6 @@
 //Escopo global
 let tokenJwt;
-
+/*
 //Evento automático
 onload = function () {
 
