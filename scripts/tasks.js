@@ -114,7 +114,7 @@ function tarefaTerminada(tarefa){
 // TAREFAS > Editando tarefas
 
 function atualizaTarefa(id){
-    
+
     let dados = {
       method: "PUT",
       headers: {
@@ -126,7 +126,9 @@ function atualizaTarefa(id){
       },
     };
 
-    fetch(`${apiBaseURL()}/tasks/${id}`, dados);
+    let dadosJSON = JSON.stringify(dados)
+
+    fetch(`${apiBaseURL()}/tasks/${id}`, dadosJSON);
 }
 
 function capturaUsuarioID(dadosUsuario) {
