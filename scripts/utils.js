@@ -52,7 +52,7 @@ function validarSenha() {
 
 
 function validarAcessar() {
-  if (emailRegex.test(inputEmail.value) && inputSenha.value.length > 4) {
+  if (emailRegex.test(inputEmail.value) && inputSenha.value.length > 0) {
     btnAcessar.classList.remove("disabled");
     return true;
   } else {
@@ -64,15 +64,20 @@ function validarAcessar() {
 
 
 formulario.addEventListener("keyup", function () {
-  validarEmail();
   inputEmail.value.trim();
-  validarAcessar();
-  validarSenha();
-  inputSenha.value.trim();
   validarAcessar();
 });
 
+inputEmail.addEventListener("blur", function(){
+  validarEmail();
+})
 
+
+
+/////////////////////////////////////////////////////////////
+
+
+// vinculação com a API
 
 btnAcessar.addEventListener("click", async function (evento) {
   emailLogin = document.querySelector("#inputEmail");

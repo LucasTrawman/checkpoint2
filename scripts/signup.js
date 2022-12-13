@@ -97,7 +97,8 @@ function ValidarDados() {
     campos[4].value.length >= 4
   ) {
     btnCadastrar.classList.remove("disabled");
-  } else{
+  }
+  else {
     btnCadastrar.classList.add("disabled");
   }
 }
@@ -109,11 +110,11 @@ formulario.addEventListener("keyup", function () {
   });
 
   ValidarDados();
-
+  
 });
 
 
-
+/////////////////////////////////////////////////////////////////
 
 
 btnCadastrar.addEventListener("click", async function (evento) {
