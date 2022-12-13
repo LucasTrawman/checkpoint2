@@ -1,6 +1,5 @@
 //Escopo global
-let tokenJwt =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1Y2FzLmZlcnJlaXJhc29hcmVzQGhvdG1haWwuY29tIiwiaWQiOjkzNywiaWF0IjoxNjcwODkxMTgwfQ.qTioJmc5S3AZjOjFpzLGUsPGetZPvzwHBmSkgAkFpQY";;
+let tokenJwt;
 
 //Evento automático
 onload = function () {
@@ -97,8 +96,7 @@ function tarefaPendente(tarefa){
     tarefasPendentes.appendChild(li);
 };
 
-
-function tarefaTerminada(tarefa){F
+function tarefaTerminada(tarefa){
     let li = document.createElement("li");
     li.classList.add("tarefa");
     li.innerHTML = `
@@ -139,38 +137,7 @@ function capturaTarefaID(tarefa){
     console.log(`${tarefa.completed}`);
 }
 
-/* TESTES
-let criarTarefa = document.querySelector(".nova-tarefa");
-let capturaUsuarioID = (dadosUsuario) => {
-    let usuarioID = `${dadosUsuario.id}`
-}
-
-let tasks = {
-        description: descricao,
-        completed: true,
-    }
-    console.log(tasks);
-
-// TAREFAS > Incluindo tarefas
-
-function incluirTarefa(descricao){
-    let novaTarefa = document.querySelector("#novaTarefa");
-    
-
-    let descricaoTarefa = normalizaStringUsandoTrim(novaTarefa.value);
-
-    atualizaAPI = JSON.stringify(descricao);
-    alert(descricaoTarefa);
-    console.log(tasks)
-    // window.location.reload();
-}
-
-criarTarefa.addEventListener("submit", function(){
-    incluirTarefa();
-})
-*/
-
-// log out
+// LOG OUT
 
 let finalizarSessao = document.getElementById("closeApp")
 
@@ -181,4 +148,50 @@ finalizarSessao.addEventListener("click", function(){
 function logout(){
     sessionStorage.removeItem('jwt')
     window.location.href = "index.html";
+}
+
+//////////////////////////////////
+
+// TAREFAS > Incluir tarefa
+let criarTarefa = document.querySelector(".nova-tarefa");
+let inputTarefa = document.querySelector("#novaTarefa");
+let novaTarefa = normalizaStringUsandoTrim(inputTarefa.value);
+
+// TAREFAS > Incluindo tarefas
+criarTarefa.addEventListener("submit", function(){
+    let tituloTarefa = {
+        description: novaTarefa,
+        completed: false
+    }
+    let tarefaJSON = JSON.stringify(tituloTarefa);
+
+    console.log(tarefaJSON);
+    tarefaAPI(tarefaJSON);
+})
+
+function tarefaAPI(jsonRecebido){
+    let tarefaRequest = {
+        method: 'POST',
+        body: jsonRecebido,
+        headers:{
+            'Authorization': tokenJwt
+        }
+    }
+
+    fetch(`${apiBaseURL()}/tasks`, tarefaRequest)
+    .then(resultado => {resultado.json()})
+    .then(resultado => {console.log(resultado)})
+    .catch(erro => {
+        loginErro(erro);
+      });
+
+    console.log(tarefaRequest);
+    // location.reload();
+}
+
+
+// TAREFA > Atualizar tarefa
+
+function atualizaTarefa(){
+    
 }
