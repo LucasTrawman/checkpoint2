@@ -49,13 +49,47 @@ async function buscaTarefas() {
             throw Error("Não foi possível buscar as tarefas");
         }
     } catch (error){
-        alert(error)
+        alert(error);
     }
 }
 
-function renderizaDadosUsuario(dadosUsuario) {
-    console.log(dadosUsuario);
+/* Customização nome do usuário no HEADER */
+let modificaUsuarioDOM = (dadosUsuario) => {
+    let nomeUsuario = document.querySelector("#nomeUsuarioHeader");
 
-    let nomeUsuarioHeader = document.getElementById("nomeUsuarioHeader");
-    nomeUsuarioHeader.innerText = `${dadosUsuario.firstName} ${dadosUsuario.lastName}`
+    // Altera o nome do usuário
+    nomeUsuario.innerText = `${dadosUsuario.firstName} ${dadosUsuario.lastName}`;
 }
+
+// LISTA DE TAREFAS
+let manipulaListaTarefas = (tarefas) => {
+    tarefas.forEach(tarefa => {
+        
+        if(tarefa.completed == true){
+            // Lista de tarefas concluidas
+        }else{
+            // Lista de tarefas pendentes
+            tarefaPendente(tarefa)
+        }
+    });
+}
+
+
+// Renderiza tarefas pendentes
+let tarefasPendentes = document.querySelector(".tarefas-pendentes");
+
+function tarefaPendente(tarefa){
+    console.log(tarefa);
+
+    let li = document.createElement("li");
+    li.classList.add("tarefa");
+    li.innerHTML = `
+        <div class="not-done"></div>
+        <div class="descricao">
+          <p class="nome">${tarefa.description}</p>
+          <p class="timestamp">Criada em: ${tarefa.createdAt}</p>
+        </div>
+    `;
+    tarefasPendentes.appendChild(li);
+
+};
