@@ -1,50 +1,69 @@
 //Escopo global
-let tokenJwt;
-/*
+let tokenJwt =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1Y2FzLmZlcnJlaXJhc29hcmVzQGhvdG1haWwuY29tIiwiaWQiOjkzNywiaWF0IjoxNjcwODkxMTgwfQ.qTioJmc5S3AZjOjFpzLGUsPGetZPvzwHBmSkgAkFpQY";;
+
 //Evento automático
 onload = function () {
-
+    // Busca o token no storage
     tokenJwt = sessionStorage.getItem("jwt");
 
     if (!tokenJwt) {
-        //Usuário não tem o token
-        location.href = "index.html";
+        //Caso o token seja inválido
+        window.location = "index.html";
     } else {
-        buscaDadosUsuarioApi();
-
+        // Executa ações automáticas necessárias
+        buscaDadosUsuario();
         // Buscar tarefas
         buscaTarefas();
     }
 }
 
-async function buscaDadosUsuarioApi() {
-
+/* HEADER > Busca usuário */
+async function buscaDadosUsuario() {
+    // Cabeçalho GET
     let configRequest = {
-        headers: {
-            'Authorization': tokenJwt
-        }
+        headers: { 'Authorization': tokenJwt }
     }
 
-    let resposta = await fetch(`${apiBaseURL()}/users/getMe`, configRequest);
-    let respostaJs = await resposta.json();
-    renderizaDadosUsuario(respostaJs);
+    try {
+        let respostaAPI = await fetch(`${apiBaseURL()}/users/getMe`, configRequest);
+        if (respostaAPI.status == 200) {
+            let respostaFinal = await respostaAPI.json();
+            modificaUsuarioDOM(respostaFinal);
+        }else{
+        throw Error("Usuário não encontrado")
+        }
+    } catch(error){
+        alert(error);
+    }
 }
 
-/* BUSCA AS TAREFAS DO USUARIO LOGADO */
+/* HEADER > Customização nome do usuário */
+let modificaUsuarioDOM = (dadosUsuario) => {
+    let nomeUsuario = document.querySelector("#nomeUsuarioHeader");
 
+    // Altera o nome do usuário
+    nomeUsuario.innerText = `${dadosUsuario.firstName} ${dadosUsuario.lastName}`;
+}
+
+
+
+// TAREFAS > Selecionando tarefas
+let tarefasPendentes = document.querySelector(".tarefas-pendentes");
+let tarefasTerminadas = document.querySelector(".tarefas-terminadas");
+
+// TAREFAS > Buscando tarefas de um usuário logado
 async function buscaTarefas() {
     let configRequest = {
-        headers: {
-            'Authorization': tokenJwt
-        }
+        headers: {'Authorization': tokenJwt}
     }
 
     try {
         let respostaAPI = await fetch(`${apiBaseURL()}/tasks`, configRequest);
     
         if (respostaAPI.status == 200){
-        let respostaFinal = await respostaAPI.json();
-        manipulaListaTarefas(respostaFinal);
+            let respostaFinal = await respostaAPI.json();
+            ListaTarefas(respostaFinal);
         }else{
             throw Error("Não foi possível buscar as tarefas");
         }
@@ -53,43 +72,50 @@ async function buscaTarefas() {
     }
 }
 
-/* Customização nome do usuário no HEADER */
-let modificaUsuarioDOM = (dadosUsuario) => {
-    let nomeUsuario = document.querySelector("#nomeUsuarioHeader");
-
-    // Altera o nome do usuário
-    nomeUsuario.innerText = `${dadosUsuario.firstName} ${dadosUsuario.lastName}`;
-}
-
 // LISTA DE TAREFAS
-let manipulaListaTarefas = (tarefas) => {
+let ListaTarefas = (tarefas) => {
     tarefas.forEach(tarefa => {
-        
-        if(tarefa.completed == true){
+        if(tarefa.completed){
             // Lista de tarefas concluidas
+            tarefaTerminada(tarefa);
         }else{
             // Lista de tarefas pendentes
-            tarefaPendente(tarefa)
+            tarefaPendente(tarefa);
         }
     });
 }
 
-
-// Renderiza tarefas pendentes
-let tarefasPendentes = document.querySelector(".tarefas-pendentes");
-
 function tarefaPendente(tarefa){
-    console.log(tarefa);
-
     let li = document.createElement("li");
     li.classList.add("tarefa");
     li.innerHTML = `
-        <div class="not-done"></div>
+        <div id="${tarefa.id}" class="not-done"></div>
+        <div class="descricao">
+          <p class="name">${tarefa.description}</p>
+          <p class="timestamp">Criada em: ${tarefa.createdAt}</p>
+        </div>
+    `;
+    tarefasPendentes.appendChild(li);
+};
+
+function tarefaTerminada(tarefa){
+    let li = document.createElement("li");
+    li.classList.add("tarefa");
+    li.innerHTML = `
+        <div class="done"></div>
         <div class="descricao">
           <p class="nome">${tarefa.description}</p>
           <p class="timestamp">Criada em: ${tarefa.createdAt}</p>
         </div>
     `;
-    tarefasPendentes.appendChild(li);
-
+    tarefasTerminadas.appendChild(li);
 };
+
+
+// TAREFAS > Editando tarefas
+let checkbox = document.querySelector(".not-done");
+
+checkbox.addEventListener("click", function() {
+    checkbox.classList.remove("not-done");
+    checkbox.classList.add("done");
+});
