@@ -6,11 +6,22 @@ function apiBaseURL() {
   return "http://todo-api.ctd.academy:3000/v1";
 }
 
+
+
 let formulario = document.querySelector("form");
 let campos = document.querySelectorAll(".required");
 let spans = document.querySelectorAll(".span-required");
 let emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 let btnCadastrar = document.querySelector("#btn_cadastrar");
+let signupUsuarioJson = "";
+let signupUsuario = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+};
+
+
 
 function setError(index) {
   campos[index].classList.remove("campo_correto");
@@ -90,7 +101,7 @@ function ValidarDados() {
   }
 }
 
-let inputNome = normalizaStringUsandoTrim(campos[0].value);
+
 
 campos[4].addEventListener("keyup", function () {
   ValidarDados();
@@ -106,23 +117,27 @@ btnCadastrar.addEventListener("click", async function (evento) {
   let inputEmail = normalizaStringUsandoTrim(campos[2].value);
   let inputSenha = normalizaStringUsandoTrim(campos[3].value);
 
+  signupUsuario.firstName = inputNome;
+  signupUsuario.lastName = inputSobrenome;
+  signupUsuario.email = inputEmail;
+  signupUsuario.password = inputSenha;
+
+  signupUsuarioJson = JSON.stringify(signupUsuario)
+
+  signupAPI(signupUsuarioJson);
+
+});
+
+function signupAPI(body) {
+
   let signupContent = {
     method: "POST",
-    body: {
-      firstName: inputNome,
-      lastName: inputSobrenome,
-      email: inputEmail,
-      password: inputSenha,
-    },
+    body: body,
     headers: {
       "Content-type": "application/json",
     },
   };
 
-  signupAPI();
-});
-
-function signupAPI() {
   fetch(`${apiBaseURL()}/users`, signupContent)
     .then((resultado) => {
       if (resultado.status == 201 || resultado.status == 200) {
@@ -133,7 +148,7 @@ function signupAPI() {
     })
     .then(() => {
       window.location.href = "index.html";
-      return true;
+      return true
     })
     .catch((erro) => {
       loginErro(erro);
@@ -141,10 +156,6 @@ function signupAPI() {
     });
 }
 
-function signupSucesso() {
-  sessionStorage.setItem("jwt", respostaApi.jwt);
-  window.location.href = "index.html";
-}
 
 function loginErro(respostaApi) {
   if (respostaApi.status == 400 || respostaApi.status == 404) {
