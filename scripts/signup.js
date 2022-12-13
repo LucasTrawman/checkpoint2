@@ -1,4 +1,3 @@
-
 function normalizaStringUsandoTrim(textoRecebido) {
   return textoRecebido.trim();
 }
@@ -91,27 +90,21 @@ function ValidarDados() {
   }
 }
 
+let inputNome = normalizaStringUsandoTrim(campos[0].value);
+
 campos[4].addEventListener("keyup", function () {
   ValidarDados();
 });
 
-btnCadastrar.addEventListener("click", async function (evento) {
 
+
+btnCadastrar.addEventListener("click", async function (evento) {
   evento.preventDefault();
 
-  let inputNome = campos[0].value;
-  let inputSobrenome = campos[1].value;
-  let inputEmail = campos[2].value;
-  let inputSenha = campos[3].value;
-
-
-
-  inputNome = normalizaStringUsandoTrim(inputNome);
-  inputSobrenome = normalizaStringUsandoTrim(inputSobrenome);
-  inputEmail = normalizaStringUsandoTrim(inputEmail);
-  inputSenha = normalizaStringUsandoTrim(inputSenha);
-
-
+  let inputNome = normalizaStringUsandoTrim(campos[0].value);
+  let inputSobrenome = normalizaStringUsandoTrim(campos[1].value);
+  let inputEmail = normalizaStringUsandoTrim(campos[2].value);
+  let inputSenha = normalizaStringUsandoTrim(campos[3].value);
 
   let signupContent = {
     method: "POST",
@@ -125,7 +118,6 @@ btnCadastrar.addEventListener("click", async function (evento) {
       "Content-type": "application/json",
     },
   };
-
 
   signupAPI();
 });
@@ -153,8 +145,6 @@ function signupSucesso() {
   sessionStorage.setItem("jwt", respostaApi.jwt);
   window.location.href = "index.html";
 }
-
-
 
 function loginErro(respostaApi) {
   if (respostaApi.status == 400 || respostaApi.status == 404) {
