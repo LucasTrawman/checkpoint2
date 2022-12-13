@@ -52,7 +52,7 @@ function validarSenha() {
 
 
 function validarAcessar() {
-  if (emailRegex.test(inputEmail.value) && inputSenha.value.length > 0) {
+  if (emailRegex.test(inputEmail.value) && inputSenha.value.length > 4) {
     btnAcessar.classList.remove("disabled");
     return true;
   } else {

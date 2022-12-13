@@ -22,7 +22,7 @@ let signupUsuario = {
 };
 
 
-
+// configuração dos erros
 function setError(index) {
   campos[index].classList.remove("campo_correto");
   campos[index].classList.add("campo_incorreto");
@@ -34,13 +34,14 @@ function removeError(index) {
   spans[index].classList.add("hidden");
 }
 
+
+// validação dos campos
 function nomeValidacao() {
   if (campos[0].value.length < 4) {
     setError(0);
   } else {
     removeError(0);
   }
-  return true;
 }
 
 function sobrenomeValidacao() {
@@ -49,7 +50,6 @@ function sobrenomeValidacao() {
   } else {
     removeError(1);
   }
-  return true;
 }
 
 function emailValidacao() {
@@ -58,54 +58,61 @@ function emailValidacao() {
   } else {
     removeError(2);
   }
-  return true;
 }
 
 function senhaValidacao() {
-  if (campos[3].value.length < 8) {
+  if (campos[3].value.length < 4) {
     setError(3);
   } else {
     removeError(3);
     compareSenhas();
   }
-  return true;
 }
 
 function senhaRepValidacao() {
-  if (campos[4].value.length < 8) {
+  if (campos[4].value.length < 4) {
     setError(4);
   } else {
     removeError(4);
     compareSenhas();
   }
-  return true;
 }
 
 function compareSenhas() {
-  if (campos[4].value == campos[3].value && campos[4].value.length >= 8) {
+  if (campos[4].value == campos[3].value && campos[4].value.length >= 4) {
     removeError(4);
   } else {
     setError(4);
   }
 }
 
-// Validação botão
+// Validação do botão
 function ValidarDados() {
+  
   if (
-    nomeValidacao() == true &&
-    sobrenomeValidacao() == true &&
-    emailValidacao() == true &&
-    senhaRepValidacao() == true
+    campos[0].value.length >= 4 &&
+    campos[1].value.length >= 4 &&
+    emailRegex.test(campos[2].value) &&
+    campos[4].value == campos[3].value &&
+    campos[4].value.length >= 4
   ) {
     btnCadastrar.classList.remove("disabled");
+  } else{
+    btnCadastrar.classList.add("disabled");
   }
 }
 
+formulario.addEventListener("keyup", function () {
+  
+  campos.forEach(element => {
+    return element.value.trim()
+  });
 
-
-campos[4].addEventListener("keyup", function () {
   ValidarDados();
+
 });
+
+
 
 
 
