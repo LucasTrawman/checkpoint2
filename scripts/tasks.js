@@ -97,7 +97,8 @@ function tarefaPendente(tarefa){
     tarefasPendentes.appendChild(li);
 };
 
-function tarefaTerminada(tarefa){
+
+function tarefaTerminada(tarefa){F
     let li = document.createElement("li");
     li.classList.add("tarefa");
     li.innerHTML = `
@@ -113,9 +114,21 @@ function tarefaTerminada(tarefa){
 //////////////////////////////////
 
 // TAREFAS > Editando tarefas
+
 function atualizaTarefa(id){
-    capturaTarefaID(id);
-    alert("Tarefa atualizada!");
+    
+    let dados = {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json",
+        "authorization": tokenJwt,
+      },
+      body: {
+        "completed": true,
+      },
+    };
+
+    fetch(`${apiBaseURL()}/tasks/${id}`, dados);
 }
 
 function capturaUsuarioID(dadosUsuario) {
@@ -156,3 +169,16 @@ criarTarefa.addEventListener("submit", function(){
     incluirTarefa();
 })
 */
+
+// log out
+
+let finalizarSessao = document.getElementById("closeApp")
+
+finalizarSessao.addEventListener("click", function(){
+    logout()
+})
+
+function logout(){
+    sessionStorage.removeItem('jwt')
+    window.location.href = "index.html";
+}

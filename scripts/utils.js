@@ -61,8 +61,6 @@ function validarAcessar() {
   }
 }
 
-
-
 formulario.addEventListener("keyup", function () {
   inputEmail.value.trim();
   validarAcessar();
