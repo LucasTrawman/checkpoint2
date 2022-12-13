@@ -119,3 +119,16 @@ checkbox.addEventListener("click", function() {
     checkbox.classList.remove("not-done");
     checkbox.classList.add("done");
 });
+
+// log out
+
+let finalizarSessao = document.getElementById("closeApp")
+
+finalizarSessao.addEventListener("click", function(){
+    logout()
+})
+
+function logout(){
+    sessionStorage.removeItem('jwt')
+    window.location.href = "index.html";
+}
