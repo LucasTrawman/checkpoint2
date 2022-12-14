@@ -1,3 +1,5 @@
+Se o link do gitpages não estiver funcionando é porque está dando um erro relacionado a comunicação que no gitpages é HTTPS e a API é HTTP
+
 Lucas Soares = 
 parte da normalização do login e signup
 botão de finalizar sessão
