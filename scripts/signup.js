@@ -3,7 +3,7 @@ function normalizaStringUsandoTrim(textoRecebido) {
 }
 
 function apiBaseURL() {
-  return "https://todo-api.ctd.academy:3000/v1";
+  return "http://todo-api.ctd.academy:3000/v1";
 }
 
 
