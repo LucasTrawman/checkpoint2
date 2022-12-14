@@ -1,5 +1,5 @@
 //Escopo global
-let tokenJwt;
+let tokenJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1Y2FzLmZlcnJlaXJhc29hcmVzQGhvdG1haWwuY29tIiwiaWQiOjkzNywiaWF0IjoxNjcwODkxMTgwfQ.qTioJmc5S3AZjOjFpzLGUsPGetZPvzwHBmSkgAkFpQY";
 
 //Evento automático
 onload = function () {
@@ -21,7 +21,9 @@ onload = function () {
 async function buscaDadosUsuario() {
     // Cabeçalho GET
     let configRequest = {
-        headers: { 'Authorization': tokenJwt }
+        headers: { 
+            "Content-type": "application/json",
+            'Authorization': tokenJwt }
     }
 
     try {
@@ -29,7 +31,6 @@ async function buscaDadosUsuario() {
         if (respostaAPI.status == 200) {
             let respostaFinal = await respostaAPI.json();
             modificaUsuarioDOM(respostaFinal);
-            capturaUsuarioID(respostaFinal);
         }else{
         throw Error("Usuário não encontrado")
         }
@@ -53,7 +54,9 @@ let tarefasTerminadas = document.querySelector(".tarefas-terminadas");
 // TAREFAS > Buscando tarefas de um usuário logado
 async function buscaTarefas() {
     let configRequest = {
-        headers: {'Authorization': tokenJwt}
+        headers: {
+            "Content-type": "application/json",
+            'Authorization': tokenJwt}
     }
 
     try {
@@ -111,34 +114,6 @@ function tarefaTerminada(tarefa){
 
 //////////////////////////////////
 
-// TAREFAS > Editando tarefas
-
-function atualizaTarefa(id){
-
-    let dados = {
-      method: "PUT",
-      headers: {
-        "Content-type": "application/json",
-        "authorization": tokenJwt,
-      },
-      body: {
-        "completed": true,
-      },
-    };
-
-    let dadosJSON = JSON.stringify(dados)
-
-    fetch(`${apiBaseURL()}/tasks/${id}`, dadosJSON);
-}
-
-function capturaUsuarioID(dadosUsuario) {
-    console.log(`${dadosUsuario.id}`);
-}
-
-function capturaTarefaID(tarefa){
-    console.log(`${tarefa.completed}`);
-}
-
 // LOG OUT
 
 let finalizarSessao = document.getElementById("closeApp")
@@ -160,40 +135,72 @@ let inputTarefa = document.querySelector("#novaTarefa");
 let novaTarefa = normalizaStringUsandoTrim(inputTarefa.value);
 
 // TAREFAS > Incluindo tarefas
-criarTarefa.addEventListener("submit", function(){
+criarTarefa.addEventListener("submit", incluirTarefa(novaTarefa));
+
+function incluirTarefa(novaTarefa){
+    
     let tituloTarefa = {
-        description: novaTarefa,
-        completed: false
+        "description": novaTarefa,
+        "completed": false
     }
+
     let tarefaJSON = JSON.stringify(tituloTarefa);
 
-    console.log(tarefaJSON);
-    tarefaAPI(tarefaJSON);
-})
-
-function tarefaAPI(jsonRecebido){
     let tarefaRequest = {
-        method: 'POST',
-        body: jsonRecebido,
-        headers:{
+        method: "POST",
+        body: tarefaJSON,
+        headers: {
+            "Content-type": "application/json",
             'Authorization': tokenJwt
         }
     }
 
-    fetch(`${apiBaseURL()}/tasks`, tarefaRequest)
-    .then(resultado => {resultado.json()})
-    .then(resultado => {console.log(resultado)})
-    .catch(erro => {
-        loginErro(erro);
-      });
+    try {
+        let request = fetch(`${apiBaseURL()}/tasks`, tarefaRequest)
 
-    console.log(tarefaRequest);
-    // location.reload();
+        if (request.status == 200){
+            let response = request.json();
+            location.reload();
+
+            console.log(response)
+        }else{
+            throw Error("Deu erro aqui")
+        }
+    } catch(error) {
+        alert(error);
+    }
 }
 
 
 // TAREFA > Atualizar tarefa
 
-function atualizaTarefa(){
-    
+function atualizaTarefa(id){
+
+    let taskBody = {
+        "completed": true
+    }
+
+    let taskBodyJSON = JSON.stringify(taskBody);
+
+    let config = {
+        method: "PUT",
+        body: taskBodyJSON,
+        headers: {
+            "Content-type": "application/json",
+            'Authorization': tokenJwt
+        }
+    }
+    try {
+        let request = fetch(`${apiBaseURL()}/tasks/${id}`, config)
+
+        if (request.status == 200 || request.status == 204){
+            let response = request.json();
+            location.reload();
+            console.log(response)
+        }else{
+            throw Error("Não foi possível atualizar as tarefas")
+        }
+    } catch(error) {
+        alert(error);
+    }
 }
