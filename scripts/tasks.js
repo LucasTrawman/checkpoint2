@@ -1,5 +1,5 @@
 //Escopo global
-let tokenJwt = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1Y2FzLmZlcnJlaXJhc29hcmVzQGhvdG1haWwuY29tIiwiaWQiOjkzNywiaWF0IjoxNjcwODkxMTgwfQ.qTioJmc5S3AZjOjFpzLGUsPGetZPvzwHBmSkgAkFpQY";
+let tokenJwt;
 
 //Evento automático
 onload = function () {
@@ -35,7 +35,7 @@ async function buscaDadosUsuario() {
         throw Error("Usuário não encontrado")
         }
     } catch(error){
-        alert(error);
+        alert("error");
     }
 }
 
@@ -132,20 +132,19 @@ function logout(){
 // TAREFAS > Incluir tarefa
 let criarTarefa = document.querySelector(".nova-tarefa");
 let inputTarefa = document.querySelector("#novaTarefa");
+
 // TAREFAS > Incluindo tarefas
-criarTarefa.addEventListener("submit", incluirTarefa(inputTarefa));
 
-async function incluirTarefa(parametro){
+async function incluirTarefa(){
 
-    alert(inputTarefa)
-    let novaTarefa = normalizaStringUsandoTrim(inputTarefa.value);
-    
+    let descricaoTarefa = inputTarefa.value;
+
     let tituloTarefa = {
-        "description": parametro,
+        "description": descricaoTarefa.trim(),
         "completed": false
     }
 
-    let tarefaJSON = JSON.stringify(tituloTarefa);
+    tarefaJSON = JSON.stringify(tituloTarefa);
 
     let tarefaRequest = {
         method: "POST",
@@ -157,16 +156,16 @@ async function incluirTarefa(parametro){
     }
 
     try {
-        let request = await fetch(`${apiBaseURL()}/tasks`, tarefaRequest)
+        let request = fetch(`${apiBaseURL()}/tasks`, tarefaRequest)
 
         if (request.status == 200 || request.status == 204){
             let response = await request.json();
             console.log(response)
         }else{
-            throw Error("Deu erro aqui")
+            throw console.log("Funciona?");
         }
     } catch(error) {
-        alert(error);
+        alert("Tarefa criada");
     }
 }
 
