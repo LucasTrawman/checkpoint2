@@ -132,15 +132,16 @@ function logout(){
 // TAREFAS > Incluir tarefa
 let criarTarefa = document.querySelector(".nova-tarefa");
 let inputTarefa = document.querySelector("#novaTarefa");
-let novaTarefa = normalizaStringUsandoTrim(inputTarefa.value);
-
 // TAREFAS > Incluindo tarefas
-criarTarefa.addEventListener("submit", incluirTarefa(novaTarefa));
+criarTarefa.addEventListener("submit", incluirTarefa(inputTarefa));
 
-function incluirTarefa(novaTarefa){
+async function incluirTarefa(parametro){
+
+    alert(inputTarefa)
+    let novaTarefa = normalizaStringUsandoTrim(inputTarefa.value);
     
     let tituloTarefa = {
-        "description": novaTarefa,
+        "description": parametro,
         "completed": false
     }
 
@@ -156,12 +157,10 @@ function incluirTarefa(novaTarefa){
     }
 
     try {
-        let request = fetch(`${apiBaseURL()}/tasks`, tarefaRequest)
+        let request = await fetch(`${apiBaseURL()}/tasks`, tarefaRequest)
 
-        if (request.status == 200){
-            let response = request.json();
-            location.reload();
-
+        if (request.status == 200 || request.status == 204){
+            let response = await request.json();
             console.log(response)
         }else{
             throw Error("Deu erro aqui")
@@ -174,7 +173,7 @@ function incluirTarefa(novaTarefa){
 
 // TAREFA > Atualizar tarefa
 
-function atualizaTarefa(id){
+async function atualizaTarefa(id){
 
     let taskBody = {
         "completed": true
@@ -191,16 +190,17 @@ function atualizaTarefa(id){
         }
     }
     try {
-        let request = fetch(`${apiBaseURL()}/tasks/${id}`, config)
+        let request = await fetch(`${apiBaseURL()}/tasks/${id}`, config)
 
         if (request.status == 200 || request.status == 204){
-            let response = request.json();
+            let response = await request.json();
             location.reload();
             console.log(response)
         }else{
             throw Error("Não foi possível atualizar as tarefas")
         }
     } catch(error) {
-        alert(error);
+        console.log(error);
     }
 }
+
